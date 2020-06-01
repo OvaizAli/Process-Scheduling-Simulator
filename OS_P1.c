@@ -2,7 +2,7 @@
 // Purpose: Operating System Project with an 
 //		    implementation of process scheduling 
 //		    algorithms in an operating system.
-// Version: 4.0
+// Version: 5.0
 // Date:    1 June 2020
 
 #include<stdio.h>
@@ -290,9 +290,15 @@ void RR(processes P[])
 			temp1[k].bt--;
 		}  
 		if(temp1[k].bt <= 0 && temp1[k].flag != 1){
-			temp1[k].wt = tcurr - temp2[k].bt - temp1[k].at;
-			temp1[k].ta = tcurr - temp1[k].at;
-			temp1[k].ct = tcurr;
+			if(temp2[k].bt < Q){
+				temp1[k].wt = tcurr - temp2[k].bt - temp1[k].at-1;
+			}
+			else{
+				temp1[k].wt = tcurr - Q - 1;
+			}
+			
+			temp1[k].ta = tcurr - temp1[k].at -1;
+			temp1[k].ct = tcurr-1;
 			pflag++;
 			temp1[k].flag = 1;
 			sumw+=temp1[k].wt;
