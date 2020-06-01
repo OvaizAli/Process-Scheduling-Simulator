@@ -2,7 +2,7 @@
 // Purpose: Operating System Project with an 
 //		    implementation of process scheduling 
 //		    algorithms in an operating system.
-// Version: 5.0
+// Version: 6.0
 // Date:    1 June 2020
 
 #include<stdio.h>
@@ -36,7 +36,7 @@ void b_sort(processes temp[])
 		}
 }
 
-void random(processes P[]){
+void random_generator(processes P[]){
 	int i;
 	int mxBT=30,mnBT=3,mxAT=0,mnAT=0;
 	printf("\n Enter total no. of processes : ");
@@ -103,7 +103,7 @@ void FCFS(processes P[]){
 
 		for(i=1;i<n;i++){
 			temp[i].ct = temp[i-1].ct+temp[i].bt;
-			temp[i].wt = temp[i].ct-temp[i].bt;
+			temp[i].wt = temp[i-1].ct-temp[i].at;
 			temp[i].ta = temp[i].ct-temp[i].at;
 			sumw+=temp[i].wt;
 			sumt+=temp[i].ta;
@@ -318,7 +318,6 @@ void RR(processes P[])
 	printf("\n\n Average waiting time = %0.2f\n Average turn-around = %0.2f.",avgwt,avgta);
 }
 
-
 void PRT_P(processes P[]){
 	int i,t_total=0,tcurr,b[10],j,x,min_pr;
 	int sumw=0,sumt=0;
@@ -408,7 +407,7 @@ int main(){
 				accept(P);
 				break;
 			case 1:
-				random(P);
+				random_generator(P);
 				break;		
 			case 2:
 				FCFS(P);
