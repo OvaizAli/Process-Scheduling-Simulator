@@ -294,7 +294,7 @@ void RR(processes P[])
 				temp1[k].wt = tcurr - temp2[k].bt - temp1[k].at-1;
 			}
 			else{
-				temp1[k].wt = tcurr - Q - 1;
+				temp1[k].wt = tcurr - Q -1;
 			}
 			
 			temp1[k].ta = tcurr - temp1[k].at -1;
