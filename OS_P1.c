@@ -36,40 +36,27 @@ void b_sort(processes temp[])
 		}
 }
 
-void  f_read(processes P[])
-{
-	int i,j,nt,btt,att,prtt;
-	char nmt[5];
-	FILE *f;
-	f = fopen("input.txt","r");
-	if(f == NULL)
-	{
-		printf("unable to open file");
-		return ;
+void random(processes P[]){
+	int i;
+	int mxBT=30,mnBT=3,mxAT=0,mnAT=0;
+	printf("\n Enter total no. of processes : ");
+	scanf("%d",&n);
+	for(i=0;i<n;i++){
+		printf("\n PROCESS [%d]",i+1);
+		printf(" Enter process name : ");
+		scanf("%s",&P[i].name);
+		printf(" Enter priority : ");
+		scanf("%d",&P[i].prt);
+		P[i].bt = (rand() % mxBT - mnBT + 1) + mnBT;
+		mxAT = P[i].bt;
+		if(i==0)
+			P[i].at = 0;
+		else
+			P[i].at = (rand() % mxAT - mnAT + 1) + mnAT;	
 	}
-	else
-	{
-		fscanf(f,"%d",&nt);
-		n = nt;
-		for(i=0;i<n;i++){
-			fscanf(f,"%s",&nmt);
-			fscanf(f,"%d",&btt);
-			fscanf(f,"%d",&att);
-			fscanf(f,"%d",&prtt);
-			
-			P[i].name[j] = nmt[j];
-			P[i].bt = btt ;
-			P[i].at = att ;
-		 	P[i].prt = prtt ;	
-		}
-		
-		fclose(f);
-		
-		printf("\n PROCESS\tB.T.\tA.T.\tPRIORITY");
-		for(i=0;i<n;i++)
-			printf("\n %s\t\t%d\t%d\t%d",P[i].name,P[i].bt,P[i].at,P[i].prt);	
-	}
-	
+	printf("\n PROCESS\tB.T.\tA.T.\tPRIORITY");
+	for(i=0;i<n;i++)
+		printf("\n %s\t\t%d\t%d\t%d",P[i].name,P[i].bt,P[i].at,P[i].prt);
 }
 
 void accept(processes P[]){
@@ -238,19 +225,21 @@ void PRT_NP(processes P[])
 			printf("\n %s\t%d\t%d",temp[i].name,temp[i].bt,temp[i].at);
 
 		sumw = temp[0].wt = 0;
-		sumt = temp[0].ta = temp[0].bt - temp[0].at;
-
+		temp[0].ct = temp[0].bt + temp[0].wt - 1;
+		sumt = temp[0].ta = temp[0].ct - temp[0].at;
+		
 		for(i=1;i<n;i++){
 			temp[i].wt = (temp[i-1].bt + temp[i-1].at + temp[i-1].wt) - temp[i].at;;
-			temp[i].ta = (temp[i].wt + temp[i].bt);
+			temp[i].ct = (temp[i].wt + temp[i].bt - 1);
+			temp[i].ta = (temp[i].ct - temp[i].at);
 			sumw+=temp[i].wt;
 			sumt+=temp[i].ta;
 		}
 		avgwt = (float)sumw/n;
 		avgta = (float)sumt/n;
-		printf("\n\n PROC.\tB.T.\tA.T.\tW.T\tT.A.T");
+		printf("\n\n PROC.\tB.T.\tA.T.\tPriority\tW.T\tC.T\tT.A.T");
 		for(i=0;i<n;i++)
-			printf("\n %s\t%d\t%d\t%d\t%d",temp[i].name,temp[i].bt,temp[i].at,temp[i].wt,temp[i].ta);
+			printf("\n %s\t%d\t%d\t%d\t\t%d\t%d\t%d",temp[i].name,temp[i].bt,temp[i].at,temp[i].prt,temp[i].wt,temp[i].ct,temp[i].ta);
 		
 		printf("\n\n GANTT CHART\n ");
 		for(i=0;i<n;i++)
@@ -382,9 +371,9 @@ void PRT_P(processes P[]){
 	}
 	printf(" %d",tcurr);
 	
-	printf("\n\n PROCESS\tB.T\tA.T\tW.T\tC.T\tT.A.T");
+	printf("\n\n PROCESS\tB.T\tA.T\tPriority\tW.T\tC.T\tT.A.T");
 		for(i=0;i<n;i++)
-			printf("\n %s\t\t%d\t%d\t%d\t%d\t%d",temp[i].name,temp[i].bt,temp[i].at,temp[i].wt,temp[i].ct,temp[i].ta);
+			printf("\n %s\t\t%d\t%d\t%d\t\t%d\t%d\t%d",temp[i].name,temp[i].bt,temp[i].at,temp[i].prt,temp[i].wt,temp[i].ct,temp[i].ta);
 	avgwt = (float)sumw/n;
 	avgta = (float)sumt/n;
 	printf("\n\n Average waiting time = %0.2f\n Average turn-around = %0.2f.",avgwt,avgta);
@@ -399,39 +388,43 @@ int main(){
 		printf("\n\n SIMULATION OF CPU SCHEDULING ALGORITHMS\n");
 		printf("\n Options:");
 		printf("\n 0. Enter process data.");
-		printf("\n 1. FCFS");
-		printf("\n 2. SJF (Non Pre-emptive)");
-		printf("\n 3. Priority Scheduling (Pre-emptive)");
-		printf("\n 4. Priority Scheduling (Non Pre-emptive)");
-		printf("\n 5. Round Robin");
-		printf("\n 6. Clear Screen");
-		printf("\n 7. Exit\n Select : ");
+		printf("\n 1. Enter with random process data.");
+		printf("\n 2. FCFS");
+		printf("\n 3. SJF (Non Pre-emptive)");
+		printf("\n 4. Priority Scheduling (Pre-emptive)");
+		printf("\n 5. Priority Scheduling (Non Pre-emptive)");
+		printf("\n 6. Round Robin");
+		printf("\n 7. Clear Screen");
+		printf("\n 8. Exit\n Select : ");
 		scanf("%d",&ch);
 		switch(ch){
 			case 0:
 				accept(P);
-				break;	
+				break;
 			case 1:
+				random(P);
+				break;		
+			case 2:
 				FCFS(P);
 				break;
-			case 2:
+			case 3:
 				SJF_NP(P);
 				break;
-			case 3:
+			case 4:
 				PRT_P(P);
 				break;
-			case 4:
+			case 5:
 				PRT_NP(P);
 				break;
-			case 5:
+			case 6:
 				RR(P);
 				break;
-			case 6:
+			case 7:
 				clear();
 				break;
-			case 7:exit(0);	
+			case 8:exit(0);	
 		}
-	}while(ch != 7);
+	}while(ch != 8);
 	//getch();
 	return 0;
 }
