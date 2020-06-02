@@ -22,6 +22,7 @@ typedef struct process{
 
 int n;
 
+// Sorting Function which sorts processes by their arrival time
 void b_sort(processes temp[])
 {
 	processes t;
@@ -36,6 +37,7 @@ void b_sort(processes temp[])
 		}
 }
 
+// Function to input random values for the given number of processes
 void random(processes P[]){
 	int i;
 	int mxBT=30,mnBT=3,mxAT=0,mnAT=0;
@@ -59,6 +61,7 @@ void random(processes P[]){
 		printf("\n %s\t\t%d\t%d\t%d",P[i].name,P[i].bt,P[i].at,P[i].prt);
 }
 
+// Takes input from the user
 void accept(processes P[]){
 	int i;
 	printf("\n Enter total no. of processes : ");
